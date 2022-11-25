@@ -3,17 +3,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package database;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
 
 /**
- *
  * @author xmanh
+ * @author jerom
  */
 public class City extends javax.swing.JFrame {
+    Connection connection = DriverManager.getConnection("jdbc:mysql://projpara.cxk0cha7pnxm.us-east-2.rds.amazonaws.com:3306/ProjectParadise", "admin", "rootdb3432");
+
+    Statement statement = connection.createStatement();
+    ResultSet rs;
 
     /**
      * Creates new form User
      */
-    public City() {
+    public City() throws SQLException {
         initComponents();
     }
 
@@ -24,7 +30,7 @@ public class City extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() throws SQLException {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -43,17 +49,14 @@ public class City extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "CityID", "Geography", "Name"
-            }
-        ) {
+        DBScripting bruh = new DBScripting();
+        int rows = bruh.getNumRows("city");
+        int columns = bruh.getNumColumns("city");
+        String[] columnNames = bruh.getColumns("city");
+        Object[][] data = bruh.getRowData("city");
+
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(rows, columns) {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
@@ -62,6 +65,10 @@ public class City extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setDataVector(data, columnNames);
+
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Add");
@@ -93,7 +100,11 @@ public class City extends javax.swing.JFrame {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "User", "City", "Mode Of Travel", "Flights", "Driving", "Lodging", "Vacation", " " }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                try {
+                    jComboBox1ActionPerformed(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -171,14 +182,22 @@ public class City extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        jTextField1.setText("Hello Textfield2 rom Button 1!");
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+        jTextField2.setText("Hello Textfield2 from Button 2");
+    }
+
+    private void jButton3ActionPerformed (java.awt.event.ActionEvent evt) {
+        jTextField3.setText("Hello Textfield3 from Button 3");
+    }
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
         int index = jComboBox1.getSelectedIndex();
         
@@ -206,11 +225,9 @@ public class City extends javax.swing.JFrame {
             new Vacation().setVisible(true);
             this.setVisible(false);
         }
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }
 
-    /**
-     * @param args the command line arguments
-     */
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -239,7 +256,11 @@ public class City extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new City().setVisible(true);
+                try {
+                    new City().setVisible(true);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }

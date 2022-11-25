@@ -4,6 +4,9 @@
  */
 package database;
 
+import javax.swing.table.DefaultTableModel;
+import java.sql.SQLException;
+
 /**
  *
  * @author xmanh
@@ -13,7 +16,7 @@ public class ModeofTravel extends javax.swing.JFrame {
     /**
      * Creates new form User
      */
-    public ModeofTravel() {
+    public ModeofTravel() throws SQLException {
         initComponents();
     }
 
@@ -24,7 +27,7 @@ public class ModeofTravel extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() throws SQLException {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -41,25 +44,25 @@ public class ModeofTravel extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "TravelMode", "TravelTIme"
-            }
-        ) {
+        DBScripting bruh = new DBScripting();
+        int rows = bruh.getNumRows("modeOfTravel");
+        int columns = bruh.getNumColumns("modeOfTravel");
+        String[] columnNames = bruh.getColumns("modeOfTravel");
+        Object[][] data = bruh.getRowData("modeOfTravel");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(rows, columns) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class
+                java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setDataVector(data, columnNames);
+
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Add");
@@ -89,7 +92,11 @@ public class ModeofTravel extends javax.swing.JFrame {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "User", "City", "Mode Of Travel", "Flights", "Driving", "Lodging", "Vacation", " " }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                try {
+                    jComboBox1ActionPerformed(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -167,7 +174,7 @@ public class ModeofTravel extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_jComboBox1ActionPerformed
        // TODO add your handling code here:
         int index = jComboBox1.getSelectedIndex();
         
@@ -228,7 +235,11 @@ public class ModeofTravel extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ModeofTravel().setVisible(true);
+                try {
+                    new ModeofTravel().setVisible(true);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }

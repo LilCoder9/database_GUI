@@ -4,6 +4,9 @@
  */
 package database;
 
+import javax.swing.table.DefaultTableModel;
+import java.sql.SQLException;
+
 /**
  *
  * @author xmanh
@@ -13,7 +16,7 @@ public class Driving extends javax.swing.JFrame {
     /**
      * Creates new form User
      */
-    public Driving() {
+    public Driving() throws SQLException {
         initComponents();
     }
 
@@ -24,7 +27,7 @@ public class Driving extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() throws SQLException {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -51,25 +54,25 @@ public class Driving extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "CarID", "PriceOfGas", "Time", "CarType", "Rental", "TravelMode", "CityID"
-            }
-        ) {
+        DBScripting bruh = new DBScripting();
+        int rows = bruh.getNumRows("driving");
+        int columns = bruh.getNumColumns("driving");
+        String[] columnNames = bruh.getColumns("driving");
+        Object[][] data = bruh.getRowData("driving");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(rows, columns) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setDataVector(data, columnNames);
+
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
@@ -106,7 +109,11 @@ public class Driving extends javax.swing.JFrame {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "User", "City", "Mode Of Travel", "Flights", "Driving", "Lodging", "Vacation", " " }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                try {
+                    jComboBox1ActionPerformed(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -226,7 +233,7 @@ public class Driving extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
         int index = jComboBox1.getSelectedIndex();
         
@@ -287,7 +294,11 @@ public class Driving extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Driving().setVisible(true);
+                try {
+                    new Driving().setVisible(true);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
