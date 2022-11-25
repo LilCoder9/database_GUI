@@ -58,4 +58,51 @@ public class DBScripting {
 
         return data;
     }
+
+    public void addRow(Object[] adder, String[] columns, String table) throws SQLException {
+        String insert = ("INSERT INTO "+ table + "(");
+        String values = "VALUES(";
+
+        for (int i = 0; i < columns.length; i++) {
+            insert += columns[i];
+            if (i != columns.length-1)
+                insert += ", ";
+            else
+                insert += ") ";
+        }
+
+        for (int i = 0; i < columns.length; i++) {
+            values += "?";
+            if (i != columns.length-1)
+                values += ", ";
+            else
+                values += ")";
+        }
+
+        PreparedStatement pStmt = connection.prepareStatement(insert + values);
+
+        for (int i = 0; i < adder.length; i++) {
+            pStmt.setObject(i+1, adder[i]);
+        }
+
+        pStmt.executeUpdate();
+    }
+
+    public void editRow(Object[] edit, String[] columns, String table) throws SQLException {
+        //UPDATE table SET values WHERE pk
+        String query = "UPDATE " + table + " SET ";
+        for (int i = 1; i < edit.length; i++) {
+            query += columns[i] + "=\"" + edit[i] + "\"";
+            if (i != columns.length-1)
+                query += ", ";
+        }
+
+        query += " WHERE " + columns[0] + "=" + edit[0];
+        statement.executeUpdate(query);
+    }
+
+    public void deleteRow(Object deleter, String[] columns, String table) throws SQLException {
+        String query = "DELETE FROM " + table + " WHERE " + columns[0] + "=" + deleter;
+        statement.executeUpdate(query);
+    }
 }
