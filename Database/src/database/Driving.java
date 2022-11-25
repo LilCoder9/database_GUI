@@ -5,6 +5,7 @@
 package database;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
 /**
@@ -54,24 +55,7 @@ public class Driving extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        DBScripting bruh = new DBScripting();
-        int rows = bruh.getNumRows("driving");
-        int columns = bruh.getNumColumns("driving");
-        String[] columnNames = bruh.getColumns("driving");
-        Object[][] data = bruh.getRowData("driving");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(rows, columns) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setDataVector(data, columnNames);
+        updateTable();
 
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
@@ -81,13 +65,35 @@ public class Driving extends javax.swing.JFrame {
         jButton1.setText("Add");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                try {
+                    jButton1ActionPerformed(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
         jButton2.setText("Edit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    jButton2ActionPerformed(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
         jButton3.setText("Delete");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    jButton3ActionPerformed(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 36)); // NOI18N
         jLabel1.setText("Driving");
@@ -225,9 +231,48 @@ public class Driving extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_jButton1ActionPerformed
+        Object[] newAdds = new Object[7];
+        DBScripting adding = new DBScripting();
+
+        newAdds[0] = jTextField1.getText();
+        newAdds[1] = jTextField2.getText();
+        newAdds[2] = jTextField3.getText();
+        newAdds[3] = jTextField4.getText();
+        newAdds[4] = jTextField5.getText();
+        newAdds[5] = jTextField6.getText();
+        newAdds[6] = jTextField7.getText();
+
+        adding.addRow(newAdds, adding.getColumns("driving"), "driving");
+        updateTable();
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(ActionEvent evt) throws SQLException {
+        Object[] newEdits = new Object[7];
+        DBScripting editing = new DBScripting();
+
+        newEdits[0] = jTextField1.getText();
+        newEdits[1] = jTextField2.getText();
+        newEdits[2] = jTextField3.getText();
+        newEdits[3] = jTextField4.getText();
+        newEdits[4] = jTextField5.getText();
+        newEdits[5] = jTextField6.getText();
+        newEdits[6] = jTextField7.getText();
+
+        editing.editRow(newEdits, editing.getColumns("driving"), "driving");
+        updateTable();
+    }
+
+    private void jButton3ActionPerformed (java.awt.event.ActionEvent evt) throws SQLException {
+        Object delete = new Object();
+        DBScripting deleting = new DBScripting();
+
+        delete = jTextField1.getText();
+
+        deleting.deleteRow(delete, deleting.getColumns("driving"), "driving");
+        updateTable();
+    }
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
@@ -301,6 +346,27 @@ public class Driving extends javax.swing.JFrame {
                 }
             }
         });
+    }
+
+    private void updateTable() throws SQLException {
+        DBScripting bruh = new DBScripting();
+        int rows = bruh.getNumRows("driving");
+        int columns = bruh.getNumColumns("driving");
+        String[] columnNames = bruh.getColumns("driving");
+        Object[][] data = bruh.getRowData("driving");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(rows, columns) {
+            Class[] types = new Class [] {
+                    java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setDataVector(data, columnNames);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
